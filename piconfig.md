@@ -1,7 +1,7 @@
 # Raspberry Pi configuration for EPICS control
 This document contains an in depth documentation on how to setup a Raspberry pi 3b with the control software EPICS.
 
-####Raspberry pi setup
+#### Raspberry pi setup
 The first thing to do is download the operating system for the pi. The raspberry pi uses a modified version of Debian called *Raspbian*. For our application we're going to download the previos version of the OS called *Raspbian stretch*.
 
 You can download the OS image [here](http://downloads.raspberrypi.org/raspbian/images/raspbian-2019-04-09/) (Download the ``2019-04-08-raspbian-stretch.zip`` file and extract the image file)
@@ -15,7 +15,7 @@ The raspberry pi doesn't have a power button; to turn it on, jus plug the a micr
 
 Once the pi is booted up, follow the instruction to complete the configuration. Once that finished the pi will restart, and you will be good to go!
 
-####``OPTIONAL``: set up a new user
+#### *OPTIONAL*: set up a new user
 
 If you want to install EPICS on a different user than the default one, you can create a new user ``custom_user`` with the following command:
 
@@ -45,7 +45,7 @@ custom_user    ALL=(ALL:ALL) ALL
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
 
-####EPICS installation
+#### EPICS installation
 
 To intsall EPICS the first thing to do is download [EPICS Base](https://epics.anl.gov/download/base/baseR3.14.12.7.tar.gz). We will use version ``3.14.12.7`` because that's the version of the software used in SPEAR3. Extract the archive in your home folder.
 
