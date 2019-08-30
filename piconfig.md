@@ -21,6 +21,64 @@ If you want to install EPICS on a different user than the default one, you can c
 
 ```shell
 sudo adduser custom_user
+#### Set up a soft link
+
+In order to acces our ``base`` folder more easily we can set up a soft link with the following command:
+
+```shell
+ln -s /home/user/base-3.14.12.7/ /home/user/epics
+```
+In this way we can acces our ``base-3.14.12.7`` folder just by writing ``cd epics``
+
+#### Create a EPICS application
+
+It's now time to create our application, that we will call ``my_app``. We will use a Pearl script that automatically create every file that we need. The script can generate varius type of EPICS application, we will use the ``example`` type. First we need to create a new folder to put the application file in:
+
+
+```shell
+cd
+mkdir my_app
+cd my_app
+```
+
+After that we can run the script with the following command:
+
+```shell
+epics/bin/linux-arm/makeBaseApp.pl -t example my_app
+epics/bin/linux-arm/makeBaseApp.pl -i -t example my_app
+```
+
+Now in the ``my_app`` folder we should have all the file that we need to set up a database.
+
+The last thing we need to do is add some ``PATH`` in the ``.bashrc`` file. This file contains the commands that are executed when you open a new terminal. **WARNING:** the ``.bashrc`` file contains critical information for the terminal. If you mess up this file, the terminal won't work anymore. For this reason before editing it create a backup with this commands:
+
+```shell
+cd 
+cp .bashrc bashrc_backup
+```
+
+We will edit the ``.bashrc`` file using the ``nano`` command:
+
+```shell
+nano .bashrc
+ 
+```
+
+Finally scroll to the bottom of the file and add the following code as the last line:
+
+```shell
+PATH=/home/user/base-3.14.12.7/bin/linux-arm:$PATH
+
+export EPICS_BASE=/home/user/base-3.14.12.7/lib/linux-arm/libca.so
+export EPICS+HOST_ARCH=linux-arm
+
+```
+
+Save and close the file pressing ``Ctrl + X`` then ``Y`` and ``Enter``
+
+#### Create a new database
+
+
 ```
 
 We then need to promote ``custom_user`` to superuser by editing the ``visudo`` file:
