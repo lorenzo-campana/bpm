@@ -90,9 +90,10 @@ cd my_app
 After that we can run the script with the following command:
 
 ```shell
-epics/bin/linux-arm/makeBaseApp.pl -t example my_app
-epics/bin/linux-arm/makeBaseApp.pl -i -t example my_app
+../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -t example my_app
+../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -i -t example my_app
 ```
+When executing the second link the prompt will ask you what application the ioc should boot. Juest press ``Enter`` to set the default value and continue. 
 
 Now in the ``my_app`` folder we should have all the file that we need to set up a database.
 
