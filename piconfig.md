@@ -78,7 +78,7 @@ In this way we can acces our ``base-3.14.12.7`` folder just by writing ``cd epic
 
 #### Create a EPICS application
 
-It's now time to create our application, that we will call ``my_app``. We will use a Pearl script that automatically create every file that we need. The script can generate varius type of EPICS application, we will use the ``example`` type. First we need to create a new folder to put the application file in:
+It's now time to create our application, that we will call ``my_app``. We will use a Pearl script that automatically create every file that we need. The script can generate varius type of EPICS application, we will use the ``ioc`` type. First we need to create a new folder to put the application file in:
 
 
 ```shell
@@ -90,13 +90,16 @@ cd my_app
 After that we can run the script with the following command:
 
 ```shell
-../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -t example my_app
-../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -i -t example my_app
+../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -t ioc my_app
+../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -i -t ioc my_app
 ```
 When executing the second link the prompt will ask you what application the ioc should boot. Juest press ``Enter`` to set the default value and continue. 
 
+After this we need to compile the application. As we did for the ``base`` folder, we will use the ``make command``. Navigate in the ``my_app`` folder and type in ``make``.
+
 Now in the ``my_app`` folder we should have all the file that we need to set up a database.
 
+#### Adding PATH to the .bashrc file
 The last thing we need to do is add some ``PATH`` in the ``.bashrc`` file. This file contains the commands that are executed when you open a new terminal. **WARNING:** the ``.bashrc`` file contains critical information for the terminal. If you mess up this file, the terminal won't work anymore. For this reason before editing it create a backup with this commands:
 
 ```shell
@@ -125,4 +128,23 @@ Save and close the file pressing ``Ctrl + X`` then ``Y`` and ``Enter``
 
 #### Create a new database
 
+We now need to create the database that will store all the record that we need for our application. We can do this in two ways:
+1. Using the VisualDCT tool 
+2. Writing the ``.db`` file manually
+To initialize the database we will write the file ourself. In the future we will use VisualDCT to modify and add record to the database. 
 
+The database files will be store in ``/my_app/my_appApp/Db``. Navigate in this folder and create a database file ``my_database.db`` using the ``nano`` command:
+
+```shell
+cd
+cd my_app/my_appApp/Db
+nano my_database.bd
+```
+
+Inside this file we will create a record (for this example we will create a ``sub`` record, a subroutine that can exectue ``C`` code. We will add the code in the next section).
+
+```c
+record(sub, my_sub) { 
+    filed(SNAM, my_subProcess)
+}
+```
