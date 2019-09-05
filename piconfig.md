@@ -145,6 +145,21 @@ Inside this file we will create a record (for this example we will create a ``su
 
 ```c
 record(sub, my_sub) { 
-    filed(SNAM, my_subProcess)
+    field(SNAM, my_subProcess)
 }
 ```
+Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``.
+
+After creating it we need to add the new database in the ``Makefile``. In the same directory of the ``my_database.db`` file open the ``Makefile`` with ``nano``. Search for this line:
+
+```
+#DB += xxx.db
+```
+
+and add 
+
+```
+DB += my_database.db
+```
+
+just after that. Save and exit.
