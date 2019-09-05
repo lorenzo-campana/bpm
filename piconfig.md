@@ -156,10 +156,9 @@ After creating it we need to add the new database in the ``Makefile``. In the sa
 #DB += xxx.db
 ```
 
-and add 
+and add the following line of code just below that. 
 
 ```
 DB += my_database.db
 ```
-
-just after that. Save and exit.
+Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``. In this way the ``make`` command will know what database it need to use when compiling the application.
