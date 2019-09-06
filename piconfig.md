@@ -205,4 +205,8 @@ After creating the record remember to compile it using ``make`` in the top folde
 
 #### Adding record to the database
 
-Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program
+Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the database ``my_database.db`` located in ``/home/user/my_app/my_appApp/Db``. 
+
+Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
+
+![Benjamin Bannekat](https://octodex.github.com/images/bannekat.png).
