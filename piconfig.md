@@ -119,6 +119,7 @@ Finally scroll to the bottom of the file and add the following code as the last 
 ```shell
 PATH=/home/user/base-3.14.12.7/bin/linux-arm:$PATH
 
+
 export EPICS_BASE=/home/user/base-3.14.12.7/lib/linux-arm/libca.so
 export EPICS+HOST_ARCH=linux-arm
 
@@ -146,6 +147,7 @@ Inside this file we will create a record (for this example we will create a ``su
 ```c
 record(sub, my_sub) { 
     field(SNAM, my_subProcess)
+    field(INAM, my_subInit)
 }
 ```
 Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``.
@@ -162,3 +164,26 @@ and add the following line of code just below that.
 DB += my_database.db
 ```
 Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``. In this way the ``make`` command will know what database it need to use when compiling the application.
+
+#### Subroutine records
+
+In this section i will explain how a subroutine record works. A subroutine is a special epics record that can execute ``C`` code. This code will be stored in the ``/home/user/my_app/my_appApp/src`` folder. To create the source code for the subroutine go in the ``src`` folder and create a ``my_subroutine.c`` file using ``nano``. Inside the file write the following code:
+
+```c
+#include <stdio.h>
+#include <subRecord.h>
+#include <registryFunction.h>
+#include <epicsExport.h>
+
+static int my_subInit(subRecord *precord) {
+     return 0;
+}
+
+static int my_subProcess(subRecord *precord) {
+     return 0;
+}
+
+/* Note the function must be registered at the end!*/
+epicsRegisterFunction(my_subInit);
+epicsRegisterFunction(my_subProcess);
+```
