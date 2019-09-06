@@ -132,7 +132,7 @@ Save and close the file pressing ``Ctrl + X`` then ``Y`` and ``Enter``
 We now need to create the database that will store all the record that we need for our application. We can do this in two ways:
 1. Using the VisualDCT tool 
 2. Writing the ``.db`` file manually
-To initialize the database we will write the file ourself. In the future we will use VisualDCT to modify and add record to the database. 
+a To initialize the database we will write the file ourself. In the future we will use VisualDCT to modify and add record to the database. 
 
 The database files will be store in ``/my_app/my_appApp/Db``. Navigate in this folder and create a database file ``my_database.db`` using the ``nano`` command:
 
@@ -187,3 +187,22 @@ static int my_subProcess(subRecord *precord) {
 epicsRegisterFunction(my_subInit);
 epicsRegisterFunction(my_subProcess);
 ```
+A subroutine record as two special attribute: 
+1. INAM: is the name of the initialization function (``my_subInit`` in our case). This function is called only once when the database is loaded.
+2. SNAM: is the name of the process function (``my_subProcess`` in our case). This function is called everytime the record gets processed. 
+Inside this two function we can write any c code we want. If the subroutine record has some input links (we will se later how to create them) we can use them in our code using the pointer ``precord->a`` for the input A (INPA), and so on for the other input (INPB, INPC, etc).
+
+to make the subroutine work we need to register it in EPICS. To do so create a new file called ``my_database.dbd`` in the same folder as the source code ``my_subroutine.c``. Open it with ``nano`` and write the following code:
+
+```c
+function(my_subInit)
+function(my_subProcess)
+```
+ 
+Then exit and save the file.
+
+After creating the record remember to compile it using ``make`` in the top folder of your application (``/home/user/my_app``).
+
+#### Adding record to the database
+
+Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program
