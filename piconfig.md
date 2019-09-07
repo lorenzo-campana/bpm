@@ -157,6 +157,7 @@ After creating it we need to add the new database in the ``Makefile``. In the sa
 #DB += xxx.db
 ```
 
+
 and add the following line of code just below that. 
 
 ```
@@ -189,6 +190,8 @@ epicsRegisterFunction(my_subProcess);
 A subroutine record as two special attribute: 
 1. INAM: is the name of the initialization function (``my_subInit`` in our case). This function is called only once when the database is loaded.
 2. SNAM: is the name of the process function (``my_subProcess`` in our case). This function is called everytime the record gets processed. 
+
+
 Inside this two function we can write any c code we want. If the subroutine record has some input links (we will se later how to create them) we can use them in our code using the pointer ``precord->a`` for the input A (INPA), and so on for the other input (INPB, INPC, etc).
 
 to make the subroutine work we need to register it in EPICS. To do so create a new file called ``my_database.dbd`` in the same folder as the source code ``my_subroutine.c``. Open it with ``nano`` and write the following code:
