@@ -18,7 +18,7 @@ Once the pi is booted up, follow the instruction to complete the configuration. 
 #### ``OPTIONAL``: set up a new user
 
 If you want to install EPICS on a different user than the default one, you can create a new user ``custom_user`` with the following command:
-
+ 
 ```shell
 sudo adduser custom_user
 ```
@@ -43,7 +43,7 @@ custom_user    ALL=(ALL:ALL) ALL
 ```
 after this your visudo file will look like this:
 
-<img src="https://i.imgur.com/QEgffBb.png" width="400">
+<img style="float: right;" src="https://i.imgur.com/QEgffBb.png" width="400">
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
 
