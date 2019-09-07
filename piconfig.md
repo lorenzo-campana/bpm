@@ -41,6 +41,10 @@ add the following line:
 ```shell
 custom_user    ALL=(ALL:ALL) ALL
 ```
+after this your visudo file will look like this:
+
+![visudo](https://i.imgur.com/QEgffBb.png=250x250).
+
 
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
@@ -118,11 +122,8 @@ Finally scroll to the bottom of the file and add the following code as the last 
 
 ```shell
 PATH=/home/user/base-3.14.12.7/bin/linux-arm:$PATH
-
-
 export EPICS_BASE=/home/user/base-3.14.12.7/lib/linux-arm/libca.so
 export EPICS+HOST_ARCH=linux-arm
-
 ```
 
 Save and close the file pressing ``Ctrl + X`` then ``Y`` and ``Enter``
@@ -209,4 +210,3 @@ Right now we only have a subroutine record in our database. In order to add othe
 
 Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
 
-![Benjamin Bannekat](https://i.imgur.com/FlZAfVQ.png).
