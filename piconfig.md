@@ -209,4 +209,4 @@ Right now we only have a subroutine record in our database. In order to add othe
 
 Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
 
-![Benjamin Bannekat](https://octodex.github.com/images/bannekat.png).
+![Benjamin Bannekat](https://i.imgur.com/FlZAfVQ.png).
