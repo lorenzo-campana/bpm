@@ -43,8 +43,7 @@ custom_user    ALL=(ALL:ALL) ALL
 ```
 after this your visudo file will look like this:
 
-![visudo](https://i.imgur.com/QEgffBb.png =250x250)
-
+<img src="https://i.imgur.com/QEgffBb.png" width="48">
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
 
