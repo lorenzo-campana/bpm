@@ -171,6 +171,7 @@ Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``. In this way the ``make
 
 #### Subroutine records
 
+
 In this section i will explain how a subroutine record works. A subroutine is a special epics record that can execute ``C`` code. This code will be stored in the ``/home/user/my_app/my_appApp/src`` folder. To create the source code for the subroutine go in the ``src`` folder and create a ``my_subroutine.c`` file using ``nano``. Inside the file write the following code:
 
 ```c
@@ -215,3 +216,4 @@ Right now we only have a subroutine record in our database. In order to add othe
 
 Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
 
+ 
