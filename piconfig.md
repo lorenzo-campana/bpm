@@ -236,5 +236,5 @@ Inside the database we should have the subroutine records that we created in the
 After opening the database you shold have a window like this:
 
 <p align="center">
-  <img style="float: right;" src=" https://i.imgur.com/IPP9u30.png" width="400">
+  <img style="float: right;" src="https://i.imgur.com/IPP9u30.png" width="400">
 </p>
