@@ -174,6 +174,8 @@ Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``. In this way the ``make
 
 In this section i will explain how a subroutine record works. A subroutine is a special epics record that can execute ``C`` code. This code will be stored in the ``/home/user/my_app/my_appApp/src`` folder. To create the source code for the subroutine go in the ``src`` folder and create a ``my_subroutine.c`` file using ``nano``. Inside the file write the following code:
 
+
+
 ```c
 #include <stdio.h>
 #include <subRecord.h>
@@ -208,12 +210,31 @@ function(my_subProcess)
  
 Then exit and save the file.
 
+Now we need to edit the ``Makefile`` inside thr ``src`` folder with the new file we just created. Open it with ``nano`` and ander the comment 
+
+```c
+#my_app.dbd will be made up from these files:
+my_app_DBD += base.dbd
+```
+
+add the following two line of code :
+
+```c
+my_app_DBD += my_database.dbd
+my_app_SRCS += my_subroutine.c
+```
+Then exit and save the file.
+
 After creating the record remember to compile it using ``make`` in the top folder of your application (``/home/user/my_app``).
 
 #### Adding record to the database
 
-Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the database ``my_database.db`` located in ``/home/user/my_app/my_appApp/Db``. 
+Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the ``.dbd`` file ``my_app.db`` located in ``/home/user/my_app/dbd``. After this you should see a black windows with white dots. Now open the database file with file -> Open... and in the file browser open the ``my_database.db`` file located in ``/home/user/my_app/my_appApp/Db``. 
 
 Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
 
- 
+After opening the database you shold have a window like this:
+
+<p align="center">
+  <img style="float: right;" src=" https://i.imgur.com/IPP9u30.png" width="400">
+</p>
