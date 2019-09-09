@@ -1,3 +1,4 @@
+
 # Raspberry Pi configuration for EPICS control
 This document contains an in depth documentation on how to setup a Raspberry pi 3b with the control software EPICS.
 
@@ -43,7 +44,10 @@ custom_user    ALL=(ALL:ALL) ALL
 ```
 after this your visudo file will look like this:
 
-<img style="float: right;" src="https://i.imgur.com/QEgffBb.png" width="400">
+<p align="center">
+  <img style="float: right;" src="https://i.imgur.com/QEgffBb.png" width="400">
+</p>
+
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
 
