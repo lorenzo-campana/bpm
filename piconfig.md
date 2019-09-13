@@ -2,7 +2,7 @@
 # Raspberry Pi configuration for EPICS control
 This document contains an in depth documentation on how to setup a Raspberry pi 3b with the control software EPICS.
 
-#### Raspberry pi setup
+### Raspberry pi setup
 The first thing to do is download the operating system for the pi. The raspberry pi uses a modified version of Debian called *Raspbian*. For our application we're going to download the previos version of the OS called *Raspbian stretch*.
 
 You can download the OS image [here](http://downloads.raspberrypi.org/raspbian/images/raspbian-2019-04-09/) (Download the ``2019-04-08-raspbian-stretch.zip`` file and extract the image file)
@@ -16,7 +16,7 @@ The raspberry pi doesn't have a power button; to turn it on, jus plug the a micr
 
 Once the pi is booted up, follow the instruction to complete the configuration. Once that finished the pi will restart, and you will be good to go!
 
-#### ``OPTIONAL``: set up a new user
+### ``OPTIONAL``: set up a new user
 
 If you want to install EPICS on a different user than the default one, you can create a new user ``custom_user`` with the following command:
  
@@ -51,7 +51,7 @@ after this your visudo file will look like this:
 After that exit pressing ``Ctrl + X`` and save the file pressing ``Y`` and then ``Enter``.
 
 
-#### EPICS installation
+### EPICS installation
 
 To intsall EPICS the first thing to do is download [EPICS Base](https://epics.anl.gov/download/base/baseR3.14.12.7.tar.gz). We will use version ``3.14.12.7`` because that's the version of the software used in SPEAR3. Extract the archive in your home folder.
 
@@ -73,7 +73,7 @@ cd VisualDCT-2.8.1
 java -cp VisualDCT.jar com.cosylab.vdct.VisualDCT
 ```
 
-#### Set up a soft link
+### Set up a soft link
 
 In order to acces our ``base`` folder more easily we can set up a soft link with the following command:
 
@@ -82,7 +82,7 @@ ln -s /home/user/base-3.14.12.7/ /home/user/epics
 ```
 In this way we can acces our ``base-3.14.12.7`` folder just by writing ``cd epics``
 
-#### Create a EPICS application
+### Create a EPICS application
 
 It's now time to create our application, that we will call ``my_app``. We will use a Pearl script that automatically create every file that we need. The script can generate varius type of EPICS application, we will use the ``ioc`` type. First we need to create a new folder to put the application file in:
 
@@ -105,7 +105,7 @@ After this we need to compile the application. As we did for the ``base`` folder
 
 Now in the ``my_app`` folder we should have all the file that we need to set up a database.
 
-#### Adding PATH to the .bashrc file
+### Adding PATH to the .bashrc file
 The last thing we need to do is add some ``PATH`` in the ``.bashrc`` file. This file contains the commands that are executed when you open a new terminal. **WARNING:** the ``.bashrc`` file contains critical information for the terminal. If you mess up this file, the terminal won't work anymore. For this reason before editing it create a backup with this commands:
 
 ```shell
@@ -130,7 +130,7 @@ export EPICS+HOST_ARCH=linux-arm
 
 Save and close the file pressing ``Ctrl + X`` then ``Y`` and ``Enter``
 
-#### Create a new database
+### Create a new database
 
 We now need to create the database that will store all the record that we need for our application. We can do this in two ways:
 1. Using the VisualDCT tool 
@@ -170,7 +170,7 @@ DB += my_database.db
 ```
 Save and exit with ``Ctrl = X`` then ``Y`` and ``Enter``. In this way the ``make`` command will know what database it need to use when compiling the application.
 
-#### Subroutine records
+### Subroutine records
 
 
 In this section i will explain how a subroutine record works. A subroutine is a special epics record that can execute ``C`` code. This code will be stored in the ``/home/user/my_app/my_appApp/src`` folder. To create the source code for the subroutine go in the ``src`` folder and create a ``my_subroutine.c`` file using ``nano``. Inside the file write the following code:
@@ -229,7 +229,7 @@ Then exit and save the file.
 
 After creating the record remember to compile it using ``make`` in the top folder of your application (``/home/user/my_app``).
 
-#### Adding record to the database
+### Adding record to the database
 
 Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the ``.dbd`` file ``my_app.db`` located in ``/home/user/my_app/dbd``. After this you should see a black windows with white dots. Now open the database file with file -> Open... and in the file browser open the ``my_database.db`` file located in ``/home/user/my_app/my_appApp/Db``. 
 
@@ -243,4 +243,10 @@ After opening the database you shold have a window like this:
 
 From this window you can create new record just by right clicking anywhere in the black dotted window and then clicking "New record...". On the window that pops up you can select the tipe of record and the name. You can edit the record's attributes by double clicking on it. 
 
-We can now link a record to our subroutine. Create an analog output (ao) record called ``my_record``
+We can now link a record to our subroutine. Create an analog output (ao) record called ``my_record`` and then right click on the subroutine record. Under INLINK select INPA and then click on the analog output that we just created. This will link the two record, and the value of ``my_record`` will be avaible to use in the subroutine calling ``precord->a``.
+
+We want to process the subroutine each time we update the value stored in the ``my_record`` record, so we need a FLNK. To create this type of link just right click on the analog output record, select FLNK and click on the subroutine. In order to setup the right processing scheme, double click on the output record and then change the fiel SCAN to "Passive". Then right click on the INPA of the subroutine and under "Process" set "PP - Process passive".
+
+
+### IOC boot
+ 
