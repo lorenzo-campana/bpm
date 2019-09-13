@@ -176,6 +176,7 @@ In this section i will explain how a subroutine record works. A subroutine is a 
 
 
 
+
 ```c
 #include <stdio.h>
 #include <subRecord.h>
@@ -238,3 +239,5 @@ After opening the database you shold have a window like this:
 <p align="center">
   <img style="float: right;" src="https://i.imgur.com/IPP9u30.png" width="400">
 </p>
+
+From this window you can create new record just by right clicking anywhere in the black dotted window and then clicking "new record". On the window that pops up you can select the tipe of record and the name. You can edit the record's attributes by double clicking on it. 
