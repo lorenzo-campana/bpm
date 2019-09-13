@@ -139,6 +139,7 @@ a To initialize the database we will write the file ourself. In the future we wi
 
 The database files will be store in ``/my_app/my_appApp/Db``. Navigate in this folder and create a database file ``my_database.db`` using the ``nano`` command:
 
+
 ```shell
 cd
 cd my_app/my_appApp/Db
@@ -240,4 +241,6 @@ After opening the database you shold have a window like this:
   <img style="float: right;" src="https://i.imgur.com/IPP9u30.png" width="400">
 </p>
 
-From this window you can create new record just by right clicking anywhere in the black dotted window and then clicking "new record". On the window that pops up you can select the tipe of record and the name. You can edit the record's attributes by double clicking on it. 
+From this window you can create new record just by right clicking anywhere in the black dotted window and then clicking "New record...". On the window that pops up you can select the tipe of record and the name. You can edit the record's attributes by double clicking on it. 
+
+We can now link a record to our subroutine. Create an analog output (ao) record called ``my_record``
