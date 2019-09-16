@@ -212,7 +212,7 @@ function(my_subProcess)
  
 Then exit and save the file.
 
-Now we need to edit the ``Makefile`` inside thr ``src`` folder with the new file we just created. Open it with ``nano`` and ander the comment 
+Now we need to edit the ``Makefile`` inside thr ``src`` folder with the new file we just created. Open it with ``nano`` and under the comment 
 ```c
 #my_app.dbd will be made up from these files:
 my_app_DBD += base.dbd
@@ -220,11 +220,18 @@ my_app_DBD += base.dbd
 
 add the following two line of code :
 
+
 ```c
 my_app_DBD += my_database.dbd
 my_app_SRCS += my_subroutine.c
 ```
 Then exit and save the file.
+
+The last thing we need to edit is the ``st.cmd`` file located in ``/home/pi/my_app/iocBoot/iocmy_app``. Open it with ``nano`` and add the following line of code under ``## Load record instances``:
+ 
+```
+dbLoadRecords("db/my_database.db")
+```
 
 After creating the record remember to compile it using ``make`` in the top folder of your application (``/home/user/my_app``).
 
@@ -259,3 +266,16 @@ While the ioc is running open another terminal. From there you can access the va
 - ``caget my_record`` to read the value inside the record
 - ``caput my_record value`` to write a value inside the record
 - ``camonitor my_record`` to start a realtime monitor of the value inside the record that is updated each time the record is processed
+
+
+### Adding library to your epics application
+
+To control the GPIO pin of the pi through epics we need to install an externa library called WiringPi. To install the library you just need to edit the ``Makefile`` located in ``/home/pi/my_app/my_appApp/src`` and add the following line at the end of the file:
+
+ ```
+ my_app_LIBS += wiringPi
+ ```
+ 
+ Remember to always make the application after you commit ny change.
+ 
+ With this library we can use the following command while programming our subroutine in C:
