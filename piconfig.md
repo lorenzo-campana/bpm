@@ -213,7 +213,6 @@ function(my_subProcess)
 Then exit and save the file.
 
 Now we need to edit the ``Makefile`` inside thr ``src`` folder with the new file we just created. Open it with ``nano`` and ander the comment 
-
 ```c
 #my_app.dbd will be made up from these files:
 my_app_DBD += base.dbd
@@ -250,3 +249,13 @@ We want to process the subroutine each time we update the value stored in the ``
 
 ### IOC boot
  
+Now we have EPICS installed with a functioning database we can start the ioc. Go to the folder ``/home/pi/my_app/iocBoot/iocmy_app`` and run the following command to start the ioc:
+
+```shell
+../../bin/linux-arm/my_app st.cmd
+```
+
+While the ioc is running open another terminal. From there you can access the varius record inside the database we loaded. In order to do so use the following command:
+- ``caget my_record`` to read the value inside the record
+- ``caput my_record value`` to write a value inside the record
+- ``camonitor my_record`` to start a realtime monitor of the value inside the record that is updated each time the record is processed
