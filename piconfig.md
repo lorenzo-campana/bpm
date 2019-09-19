@@ -58,8 +58,7 @@ To intsall EPICS the first thing to do is download [EPICS Base](https://epics.an
 To compile ``EPICS Base`` we will use the ``make`` command:
 
 ```shell
-cd
-cd base-3.14.12.7
+cd ~/base-3.14.12.7
 make
 ```
 
@@ -68,8 +67,7 @@ Now we need to install a java based graphic interface called [VisualDCT](https:/
 To open the graphic interface and visualize database, just type the following command:
 
 ```shell
-cd 
-cd VisualDCT-2.8.1
+cd ~/VisualDCT-2.8.1
 java -cp VisualDCT.jar com.cosylab.vdct.VisualDCT
 ```
 
@@ -237,7 +235,7 @@ After creating the record remember to compile it using ``make`` in the top folde
 
 ### Adding record to the database
 
-Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the ``.dbd`` file ``my_app.db`` located in ``/home/user/my_app/dbd``. After this you should see a black windows with white dots. Now open the database file with file -> Open... and in the file browser open the ``my_database.db`` file located in ``/home/user/my_app/my_appApp/Db``. 
+:Right now we only have a subroutine record in our database. In order to add other PV (the equivalent of variables for the database) we will use VisualDCT. Open the Java program (use the lines of code at the end of the **EPICS installation** chapter) and from the file browser open the ``.dbd`` file ``my_app.db`` located in ``/home/user/my_app/dbd``. After this you should see a black windows with white dots. Now open the database file with file -> Open... and in the file browser open the ``my_database.db`` file located in ``/home/user/my_app/my_appApp/Db``. 
 
 Inside the database we should have the subroutine records that we created in the previous chapter. In VisualDCT records appear as boxes with the type of record on the top, followed by the name of the record and its attribute in the lower part. 
 
@@ -268,7 +266,7 @@ While the ioc is running open another terminal. From there you can access the va
 - ``camonitor my_record`` to start a realtime monitor of the value inside the record that is updated each time the record is processed
 
 
-### Adding library to your epics application
+### Adding libraries to your epics application: wiringPi
 
 To control the GPIO pin of the pi through epics we need to install an externa library called WiringPi. To install the library you just need to edit the ``Makefile`` located in ``/home/pi/my_app/my_appApp/src`` and add the following line at the end of the file:
 
@@ -291,4 +289,18 @@ To control the GPIO pin of the pi through epics we need to install an externa li
 void my_interrupt()
 ```
 
- 
+### Arduino integration
+
+If we want the pi to comunicate with the arduino we will need two additional libraries: ASYNC and StreamDevice. With this two piece of software we will be able to setup a serial comunication between the epics ioc on the pi and the arduino. This is usefull if you need to run a real time program on a more stable system; The pi will handle the IOC and will send the arduino the parameter, while the arduino will execute the program.
+
+Let-s install the libraries. Enter in the ``~/Downloads`` folder and the download the files with this two command:
+
+```shell
+wget http://aps.anl.gov/epics/download/modules/asyn4-28.tar.gz
+wget http://epics.web.psi.ch/software/streamdevice/StreamDevice-2.tgz
+```
+After that go in your EPICS base folder and create a new ``modules`` folder where we will extract the libraries:
+
+```
+cd ~/base
+```
