@@ -279,3 +279,12 @@ To control the GPIO pin of the pi through epics we need to install an externa li
  Remember to always make the application after you commit ny change.
  
  With this library we can use the following command while programming our subroutine in C:
+ 
+ - ``#include <wiringPi.h>`` to include the library in the code
+ - ``wiringPiSetup()`` to initialise the library. this function must be called at the start of the programm
+ - ``pinMode(int pin, int mode)`` to set up one of the pin. The available mode are ``INPUT`` or output ``OUTPUT``. You must specify the wiringPi pin number and not the one written on the header. [Here](https://projects.drogon.net/raspberry-pi/wiringpi/pins/) you can find the right pin number.
+ 
+- ``digitalWrite(int pin, int value)`` to write ``HIGH`` (1) or ``LOW`` (0) to an output pin.
+
+
+ 
