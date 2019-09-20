@@ -315,7 +315,7 @@ After that enter the async folder with ``cd ~/base-3.14.12.7/modules/async`` and
 -Comment out the IPAC line
 -Comment out the SNCSEQ line
 -Comment out the EPICS_BASE line and add the following line ``EPICS_BASE=/home/pi/base-3.14.12.7``
-After that in ``~/base-3.14.12.7/modules/asyng`` run ``make``.
+After that in ``~/base-3.14.12.7/modules/async`` run ``make``.
 
 When this completes, the system is ready for installation of the Stream Device library. Create a new folder inside the modules and then extract there the libraray that we downloaded. after that run the ``makeBaseApp.pl`` script, with these commands:
 
