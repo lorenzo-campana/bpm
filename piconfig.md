@@ -288,6 +288,7 @@ To control the GPIO pin of the pi through epics we need to install an externa li
 void my_interrupt()
 ```
 
+
 ### Arduino integration
 
 If we want the pi to comunicate with the arduino we will need two additional libraries: ASYNC and StreamDevice. With this two piece of software we will be able to setup a serial comunication between the epics ioc on the pi and the arduino. This is usefull if you need to run a real time program on a more stable system; The pi will handle the IOC and will send the arduino the parameter, while the arduino will execute the program.
@@ -337,3 +338,60 @@ ASYN=/home/pi/base-3.14.12.7/modules/asyn
 To finish the installation run ``make`` in ``~/base-3.14.12.7/modules/stream``. Once this completes, ``cd`` into ``StreamDevice-2-6``, and run ``make`` again.
 
 ### Serial communication between Pi and Arduino
+The first thing to do is to tell our epics application ehere are the two libraries that we just installed. To do so, edit the ``RELEASE`` file located in ``~/my_app/configure/`` and add the following lines of code:
+
+```
+ASYN=/home/pi/base-3.14.12.7/modules/asyn
+STREAM=/home/pi/base-3.14.12.7/modules/stream
+```
+
+After that we need to create a ``my_protocol.proto`` file that will contain the instruction for epics on what to send to the arduino via serial comunication. Create this file using ``nano`` in the Db folder of your application (``~/my_app/my_appApp/Db/``):
+
+```
+Terminator = LF;
+set_parameter {
+    out "P%d\n";
+    ExtraInput = Ignore;
+}
+```
+The first line tells EPICS how to terminate strings, and this matches the expectations of the Arduino Serial code. Te function ``set_parameter`` tells epics to write something (in our case the letter "P" followed by an integer and a new line) in the serial bus. We will use this information later, in the arduino code. 
+
+Now we need a new database record that will store the parameter that we want to send to the arduino. Open ``my_database.db`` using Visual DCT and create a new analog output (ao) record called ``my_param``. Doule click on it to open the properties and edit the DTYP to "stream" and the OUT to ``@my_protocol.proto set_parameter() $(PORT)``. Everytime this record gets processed, the ``set_parameter()`` function defined in the proto file will be executed, with its output oing in the seial port indicated (in this case ``$(PORT)``, we will set the right port in the next step).
+
+Now we need to modify the Makefile. Move to ``~/my_app/my_appApp/src`` and edit the Makefile you find in there using ``nano``. After the line that says, ``myapp_DBD += base.dbd``, add the following lines:
+
+```
+my_app_DBD += asyn.dbd
+my_app_DBD += stream.dbd
+my_app_DBD += drvAsynIPPort.dbd
+my_app_DBD += drvAsynSerialPort.dbd
+```
+and near the end of the file, after the line ``#  ADD EXTRA GNUMAKE RULES BELOW HERE`` add:
+
+```
+my_app_LIBS += asyn
+my_app_LIBS += stream
+```
+
+Now move to ``~/my_app/iocBoot/iocmy_app`` and edit the ``st.cmd`` file. After ``> envPaths`` (near the top), add the following
+
+```
+epicsEnvSet(STREAM_PROTOCOL_PATH,"../../my_appApp/Db")
+```
+
+After the line, ” my_app_registerRecordDeviceDriver pdbbase”, add the following
+
+```
+drvAsynSerialPortConfigure("SERIALPORT","/dev/ttyACM0",0,0,0)
+asynSetOption("SERIALPORT",-1,"baud","115200")
+asynSetOption("SERIALPORT",-1,"bits","8")
+asynSetOption("SERIALPORT",-1,"parity","none")
+asynSetOption("SERIALPORT",-1,"stop","1")
+asynSetOption("SERIALPORT",-1,"clocal","Y")
+asynSetOption("SERIALPORT",-1,"crtscts","N")
+dbLoadRecords("db/my_database.db","PORT='SERIALPORT'")
+```
+
+These lines configure a serial connection called “SERIALPORT”, linked to /dev/ttyACM0 (the arduino should be connected to this port, but check if it's true), and then set all the options so that the serial communications works in the way that the Arduino expects. Now that this connection has been defined, it can be used in place of the $(PORT) variable referred to in the database definition file.
+
+In this same file (``st.cmd``), change the line that contains $(TOP) to ``cd /home/pi/my_app``, and any references to $(IOC) to iochelloWorldIOC.
