@@ -86,16 +86,15 @@ It's now time to create our application, that we will call ``my_app``. We will u
 
 
 ```shell
-cd
-mkdir my_app
+mkdir ~/my_app
 cd my_app
 ```
 
 After that we can run the script with the following command:
 
 ```shell
-../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -t ioc my_app
-../base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -i -t ioc my_app
+~/base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -t ioc my_app
+~/base-3.14.12.7/bin/linux-arm/makeBaseApp.pl -i -t ioc my_app
 ```
 When executing the second link the prompt will ask you what application the ioc should boot. Juest press ``Enter`` to set the default value and continue. 
 
@@ -139,8 +138,8 @@ The database files will be store in ``/my_app/my_appApp/Db``. Navigate in this f
 
 
 ```shell
-cd
-cd my_app/my_appApp/Db
+
+cd ~/my_app/my_appApp/Db
 nano my_database.bd
 ```
 
@@ -250,7 +249,7 @@ From this window you can create new record just by right clicking anywhere in th
 We can now link a record to our subroutine. Create an analog output (ao) record called ``my_record`` and then right click on the subroutine record. Under INLINK select INPA and then click on the analog output that we just created. This will link the two record, and the value of ``my_record`` will be avaible to use in the subroutine calling ``precord->a``.
 
 We want to process the subroutine each time we update the value stored in the ``my_record`` record, so we need a FLNK. To create this type of link just right click on the analog output record, select FLNK and click on the subroutine. In order to setup the right processing scheme, double click on the output record and then change the fiel SCAN to "Passive". Then right click on the INPA of the subroutine and under "Process" set "PP - Process passive".
-
+ 
 
 ### IOC boot
  
@@ -299,8 +298,40 @@ Let-s install the libraries. Enter in the ``~/Downloads`` folder and the downloa
 wget http://aps.anl.gov/epics/download/modules/asyn4-28.tar.gz
 wget http://epics.web.psi.ch/software/streamdevice/StreamDevice-2.tgz
 ```
-After that go in your EPICS base folder and create a new ``modules`` folder where we will extract the libraries:
+After that go in your EPICS base (``~/base-3.14.12.7``) folder and create a new folder called  ``modules``:
 
 ```
 cd ~/base
+mkdir modules
 ```
+The first library that we will install is ASYNC, because it-s required for StreamDevice. Extract the library and create a soft link to the folder with this two command:
+
+```shell
+tar -zxf ~/Downloads/asyn4-28.tar.gz -C ~/base-3.14.12.7/modules/
+ln -s /home/pi/base-3.14.12.7/modules/asyn4-28 /home/pi/base-3.14.12.7/modules/asyn
+```
+
+After that enter the async folder with ``cd ~/base-3.14.12.7/modules/async`` and edit the ``RELEASE`` file located in the ``configure`` folder using ``nano`` as always.
+-Comment out the IPAC line
+-Comment out the SNCSEQ line
+-Comment out the EPICS_BASE line and add the following line ``EPICS_BASE=/home/pi/base-3.14.12.7``
+After that in ``~/base-3.14.12.7/modules/asyng`` run ``make``.
+
+When this completes, the system is ready for installation of the Stream Device library. Create a new folder inside the modules and then extract there the libraray that we downloaded. after that run the ``makeBaseApp.pl`` script, with these commands:
+
+```shell
+mkdir /home/pi/base-3.14.12.7/modules/stream
+cd /home/pi/base-3.14.12.7/modules/stream
+tar -zxvf ~/Downloads/StreamDevice-2.tgz -C  /home/pi/base-3.14.12.7/modules/stream
+makeBaseApp.pl -t support
+```
+
+The last command will ask you the application name; just press ``Enter`` to continue.
+
+In order to let StreamDevice knows where ASYNC is, add the following line of code in the ``RELEASE`` file located in the configure folder:
+
+```shell
+ASYN=/home/pi/base-3.14.12.7/modules/asyn
+```
+
+To finish the installation run ``make`` in ``~/base-3.14.12.7/modules/stream``. Once this completes, ``cd`` into ``StreamDevice-2-6``, and run ``make`` again.
