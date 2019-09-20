@@ -335,3 +335,5 @@ ASYN=/home/pi/base-3.14.12.7/modules/asyn
 ```
 
 To finish the installation run ``make`` in ``~/base-3.14.12.7/modules/stream``. Once this completes, ``cd`` into ``StreamDevice-2-6``, and run ``make`` again.
+
+### Serial communication between Pi and Arduino
