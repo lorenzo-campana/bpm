@@ -353,10 +353,18 @@ set_parameter {
     out "P%d\n";
     ExtraInput = Ignore;
 }
-```
-The first line tells EPICS how to terminate strings, and this matches the expectations of the Arduino Serial code. Te function ``set_parameter`` tells epics to write something (in our case the letter "P" followed by an integer and a new line) in the serial bus. We will use this information later, in the arduino code. 
 
-Now we need a new database record that will store the parameter that we want to send to the arduino. Open ``my_database.db`` using Visual DCT and create a new analog output (ao) record called ``my_param``. Doule click on it to open the properties and edit the DTYP to "stream" and the OUT to ``@my_protocol.proto set_parameter() $(PORT)``. Everytime this record gets processed, the ``set_parameter()`` function defined in the proto file will be executed, with its output oing in the seial port indicated (in this case ``$(PORT)``, we will set the right port in the next step).
+get_value {
+    out "R";
+    in "R %s";
+    ExtraInput = Ignore;
+}
+```
+The first line tells EPICS how to terminate strings, and this matches the expectations of the Arduino Serial code. The function ``set_parameter`` tells epics to write something (in our case the letter "P" followed by an integer and a new line) in the serial bus, while the ``get_value`` tells epics to expect something (in our case the letter "R" followed by a string) from the serial bus. We will use this information later, in the arduino code. 
+
+Now we need a new database record that will store the parameter that we want to send to the arduino. Open ``my_database.db`` using Visual DCT and create a new analog output (ao) record called ``my_param``. Double click on it to open the properties and edit the DTYP to "stream" and the OUT to ``@my_protocol.proto set_parameter() $(PORT)``. Everytime this record gets processed, the ``set_parameter()`` function defined in the proto file will be executed, with its output oing in the seial port indicated (in this case ``$(PORT)``, we will set the right port in the next step).
+
+Create a second analog input record called ``my_value``. Double click on it to open the properties and edit the DTYP to "stream" and the INP to ``@my_protocol.proto get_value() $(PORT)``
 
 Now we need to modify the Makefile. Move to ``~/my_app/my_appApp/src`` and edit the Makefile you find in there using ``nano``. After the line that says, ``myapp_DBD += base.dbd``, add the following lines:
 
@@ -395,3 +403,50 @@ dbLoadRecords("db/my_database.db","PORT='SERIALPORT'")
 These lines configure a serial connection called “SERIALPORT”, linked to /dev/ttyACM0 (the arduino should be connected to this port, but check if it's true), and then set all the options so that the serial communications works in the way that the Arduino expects. Now that this connection has been defined, it can be used in place of the $(PORT) variable referred to in the database definition file.
 
 In this same file (``st.cmd``), change any references to $(TOP) to ``/home/pi/my_app``, and any references to $(IOC) to ``iocmy_app``.
+
+Finally go to ``~/my_app`` and ``make``.
+
+Now we need to write the code that will go inside the arduino. The following code is an example:
+
+```c
+String input = "";
+int parameter;
+
+void setup() {
+ Serial.begin(115200); 
+ }
+ 
+void loop () {
+
+ while (Serial.available()>0){
+   char lastRecvd = Serial.read();
+   if (lastRecvd == '\n') { 
+     switch (input[0]) {
+       case 'P': // A write command has come in
+         input = input.substring(1,input.length());
+         parameter=input.toInt();
+         input = "";
+         break;
+       case 'R': // A read command has come in
+         Serial.print("something"); 
+         input = "";
+         break;
+       default:
+         break;
+     }
+   }
+   else { // Input is still coming in
+     input += lastRecvd;
+   }
+ }
+}
+ 
+```
+In the ``setup()`` we setup the serial comunication. In the ``loop()`` the arduino scans the serial and record when something comes through. If it gets the letter "P" he will set the variable ``parameter`` to what it received from the serial. If it receives a "R" it will write something to the serial bus. 
+
+This code, together with the proto file, connects the two records that we created to the serial, allowing the arduino to read and write them. 
+
+### Arduino + Pi 16 channel multiplexer controller
+In this github repository you can find all the file necessary to create an EPICS application that can comunicate to an arduino in order to control a minicircuits [USB / TTL RF SP16T Switch](https://www.minicircuits.com/pdfs/USB-1SP16T-83H.pdf), a 16 channel multiplexer in two different modes:
+-Manual mode: you can set the channel that you want to output
+-Automatic mode: you can select one or more channels and the arduino will continuously switch between them, after it detects a trigger signal. you can set how long a channel is selected as output (dwell time), how many times you want to switch between the selected channels (cycles), and the delay from the trigger signal.
