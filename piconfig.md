@@ -394,4 +394,4 @@ dbLoadRecords("db/my_database.db","PORT='SERIALPORT'")
 
 These lines configure a serial connection called “SERIALPORT”, linked to /dev/ttyACM0 (the arduino should be connected to this port, but check if it's true), and then set all the options so that the serial communications works in the way that the Arduino expects. Now that this connection has been defined, it can be used in place of the $(PORT) variable referred to in the database definition file.
 
-In this same file (``st.cmd``), change the line that contains $(TOP) to ``cd /home/pi/my_app``, and any references to $(IOC) to iochelloWorldIOC.
+In this same file (``st.cmd``), change any references to $(TOP) to ``/home/pi/my_app``, and any references to $(IOC) to ``iocmy_app``.
