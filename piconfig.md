@@ -389,6 +389,7 @@ epicsEnvSet(STREAM_PROTOCOL_PATH,"../../my_appApp/Db")
 
 After the line, ” my_app_registerRecordDeviceDriver pdbbase”, add the following
 
+
 ```
 drvAsynSerialPortConfigure("SERIALPORT","/dev/ttyACM0",0,0,0)
 asynSetOption("SERIALPORT",-1,"baud","115200")
@@ -450,3 +451,7 @@ This code, together with the proto file, connects the two records that we create
 In this github repository you can find all the file necessary to create an EPICS application that can comunicate to an arduino in order to control a minicircuits [USB / TTL RF SP16T Switch](https://www.minicircuits.com/pdfs/USB-1SP16T-83H.pdf), a 16 channel multiplexer in two different modes:
 - Manual mode: you can set the channel that you want to output
 - Automatic mode: you can select one or more channels and the arduino will continuously switch between them, after it detects a trigger signal. you can set how long a channel is selected as output (dwell time), how many times you want to switch between the selected channels (cycles), and the delay from the trigger signal.
+
+The file provided are:
+- the ``.proto`` [file](arduino.proto) for the serial comunication 
+- the [sketch](switch.ino) for the arduino
