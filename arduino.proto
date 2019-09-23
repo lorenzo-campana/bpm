@@ -1,0 +1,35 @@
+Terminator = LF;
+set_dwell {
+    out "D%d\n";
+    ExtraInput = Ignore;
+}
+set_cycles {
+    out "C%d\n";
+    ExtraInput = Ignore;
+}
+
+set_mode {
+    out "T%d\n";
+    ExtraInput = Ignore;
+}
+
+set_mask {
+    out "M%d\n";
+    ExtraInput = Ignore;
+}
+
+set_channel {
+    out "H%d\n";
+    ExtraInput = Ignore;
+}
+
+set_delay {
+    out "Y%d\n";
+    ExtraInput = Ignore;
+}
+
+get_error {
+    out "R";
+    in "R %s";
+    ExtraInput = Ignore;
+}
