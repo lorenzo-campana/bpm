@@ -1,6 +1,6 @@
 // This Arduino sketch is used to control a minicircuit USB / TTL RF SP16T Switch, a 16 channel multiplexer. The parameter are set through serial comunication between the arduino and a Raspberry Pi with installed EPICS, the ASYNC and StreamRecord libraries. 
-The program features two different operation modes: 
--- MANUAL: this mode lets you decide which channel of the 16 of the multiplexer you want as output. 
+//The program features two different operation modes: 
+//-- MANUAL: this mode lets you decide which channel of the 16 of the multiplexer you want as output. 
 // -- AUTO: this mode lets ypu select one or more channel of the multiplexer. The arduino will continuously switch between them, after it detects a trigger signal. you can set how long a channel is selected as output (dwell time), how many times you want to switch between the selected channels (cycles), and the delay from the trigger signal.
 
 #include <avr/interrupt.h>  
