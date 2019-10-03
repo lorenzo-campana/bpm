@@ -32,5 +32,5 @@ On the toolbar you can find other usefull command:
 With this project we will set up a serial communication between the microcontroller and the computer using the UART protocol. The first thing we need is a way to test the code. Download [Hterm](https://www.heise.de/download/product/hterm-53283), a virtual interface to simulate serial input and output. The program doesn't need installation, just launch the ``.exe`` file. Connect the XMC 4700 from the debugger micro USB to the PC and select the right COM port on the Hterm terminal. Then set the other parameter according to the following image:
 
 <p align="center">
-  <img style="float: right;" src="https://i.imgur.com/vSITmo7.png" width="400">
+  <img style="float: right;" src="https://i.imgur.com/vSITmo7.png" width="700">
 </p>
