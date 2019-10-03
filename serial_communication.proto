@@ -4,6 +4,7 @@ set_dwell {
     out "D%d\n";
     ExtraInput = Ignore;
 }
+
 set_cycles {
     out "C%d\n";
     ExtraInput = Ignore;
