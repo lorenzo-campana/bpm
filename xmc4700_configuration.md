@@ -5,6 +5,6 @@ This document is a step by step documentation on how to configure a [XMC 4700 re
 - UART Communication
 - LCD Display control 
 
-###Dave Installation
+### Dave Installation
 
 
