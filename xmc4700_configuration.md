@@ -13,9 +13,18 @@ In order to test and upload our programs on the microcontroller we need to insta
 
 Now we can create our first project in DAVE. Go to File -> New -> DAVE project... and enter the new of the project. Select DAVE CE Project and click Next. In the next window select your microcontroller (in our case XMC 4700 Relax kit) and tick "Add floating point support printf and scanf" at the bottom. Click Finish and you are done.
 
+DAVE projects are based on APPs. You can add them clicking on the "Add new APP" button located on the top toolbar. APPs are used to add functionalities to your project. We will see some examples in the next sections of the documents. 
+
+On the toolbar you can find other usefull command:
+
+
 <p align="center">
-  <img style="float: right;" src="https://i.imgur.com/xlVlGVJ.png" width="400">
+  <img style="float: right;" src="https://i.imgur.com/GfktHUA.png" width="400">
 </p>
 
-
+- **Rebuild Active Project** is used to compile your current active project. Use this command everytime you modify the ``main.c`` file.
+- **Manual Resources Assignment** is used to assign resources, for examples to link an interrupt to other APP
+- **Manual Pin Allocator** is used to assign a pin from the XMC 4700 header to one APP
+- **Generate Code** is used to generate the header files from the APP of the project. Everytime you modify one of the APP from the GUI (accessed by double clicking it form the APP dependency tab at the bottom) you need to generate a new code before building it.
+- **Debugger** is used to start the debugger. After clicking the button, the program will switch into the debug view; in this view you can test your code executing one command line at the time, by pressing the "Step Over" button (F6). In the top right there is the "Variables" tab, where you can check the real time value of every variables of the code. To exit the debugger view use the right part of the toolbar (DAVE CE button).
 
