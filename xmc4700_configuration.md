@@ -9,7 +9,7 @@ This document is a step by step documentation on how to configure a [XMC 4700 re
 
 In order to program the XMC 4700 you need to use the DEVE IDE. You can download it from the Infineon [website](https://infineoncommunity.com/dave-download_ID645); follow this link and submit your information to receive an email with the download link. Once downloaded, extract the ``DAVE-IDE-4.4.2-64Bit`` folder and create a desktop shortcut to the ``DAVE`` application located in the Eclipse folder. The program doesn't need an installation, just double click on the shortcut to launch it. 
 
-In order to test and upload our programs on the microcontroller we need to install the SEGGER J-link debugger. Go to this [link](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack) and download the latest version of the software. During the installation make sure to also install the USB Driver for the debugger. 
+In order to test and upload our programs on the microcontroller we need to install the SEGGER J-link debugger. Go to this [link](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack) and download the latest version of the software. During the installation make sure to also install the USB Driver for the debugger. Connect the XMC 4700 from the debugger micro USB port to the PC. If the driver are installed correctly, the green LED will blink from a second and then stop.
 
 Now we can create our first project in DAVE. Go to File -> New -> DAVE project... and enter the new of the project. Select DAVE CE Project and click Next. In the next window select your microcontroller (in our case XMC 4700 Relax kit) and tick "Add floating point support printf and scanf" at the bottom. Click Finish and you are done.
 
@@ -28,3 +28,9 @@ On the toolbar you can find other usefull command:
 - **Generate Code** is used to generate the header files from the APP of the project. Everytime you modify one of the APP from the GUI (accessed by double clicking it form the APP dependency tab at the bottom) you need to generate a new code before building it.
 - **Debugger** is used to start the debugger. After clicking the button, the program will switch into the debug view; in this view you can test your code executing one command line at the time, by pressing the "Step Over" button (F6). In the top right there is the "Variables" tab, where you can check the real time value of every variables of the code. To exit the debugger view use the right part of the toolbar (DAVE CE button).
 
+### UART Communication
+With this project we will set up a serial communication between the microcontroller and the computer using the UART protocol. The first thing we need is a way to test the code. Download [Hterm](https://www.heise.de/download/product/hterm-53283), a virtual interface to simulate serial input and output. The program doesn't need installation, just launch the ``.exe`` file. Connect the XMC 4700 from the debugger micro USB to the PC and select the right COM port on the Hterm terminal. Then set the other parameter according to the following image:
+
+<p align="center">
+  <img style="float: right;" src="https://i.imgur.com/GfktHUA.png" width="400">
+</p>
