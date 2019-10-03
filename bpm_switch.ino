@@ -172,7 +172,5 @@ void loop () {
 
 
 void interrupt10hz() {
-
     trigger=1; 
-
 }
