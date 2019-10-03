@@ -453,5 +453,5 @@ In this github repository you can find all the file necessary to create an EPICS
 - Automatic mode: you can select one or more channels and the arduino will continuously switch between them, after it detects a trigger signal. you can set how long a channel is selected as output (dwell time), how many times you want to switch between the selected channels (cycles), and the delay from the trigger signal.
 
 The file provided are:
-- the ``.proto`` [file](arduino.proto) for the serial comunication 
-- the [sketch](switch.ino) for the arduino
+- the ``.proto`` [file](serial_communication.proto) for the serial comunication 
+- the [sketch](bpm_switch.ino) for the arduino
