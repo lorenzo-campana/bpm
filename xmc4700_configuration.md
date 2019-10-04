@@ -48,7 +48,19 @@ Now we need to wire the APP to the pin. Open the Manual Pin Allocator and set pi
 After that in the prokect explorer on the left, double click on ``main.c`` to open the code. Delete everything and copy this code in:
 
 ```C
-if(status == DAVE_STATUS_SUCCESS)
+#include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
+#include <stdio.h.>
+int main(void)
+{
+  DAVE_STATUS_t status;
+  uint8_t Send_Data[50] = "test";
+  uint8_t Rec_Data[20]={'\0'};
+  uint8_t index = 0;
+
+  /*Initialize Dave (including UART) */
+  status = DAVE_Init();
+
+  if(status == DAVE_STATUS_SUCCESS)
   {
     /*Transmit the string */
     while(Send_Data[index] != 0)
@@ -102,6 +114,9 @@ if(status == DAVE_STATUS_SUCCESS)
   }
   return 1U;
 }
+
+
+
 
 ```
 
