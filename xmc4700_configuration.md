@@ -123,3 +123,32 @@ int main(void)
 This code sends through UART communication the string ``Send_Data`` and then receive data untill a ``\n`` comes through. At that point the program sends back the message received. The code can also formats the string sent if the string is in the format "<character> <spece> <integer>", saving the character in the variable ``char_value`` and the integer in ``int_value``.
 
 To test the program build the project and start the debugger. Then click "Resume" in the debug view toolbar. Use the Hterm terminal to see the receive and send the string to the microcontroller. 
+
+### LCD Display
+
+For this example we will use a Newhaven Dislay [NHD-0420D3Z-FL-GBW-V3](https://www.digikey.com/product-detail/en/newhaven-display-intl/NHD-0420D3Z-FL-GBW-V3/NHD-0420D3Z-FL-GBW-V3-ND/1701256) in I2C mode. To enter I2C mode you need to solder a jumper across the R1 pad on the back on the display, as shown in the following image:
+
+<p align="center">
+  <img style="float: right;" src="https://i.imgur.com/KLBopPq.png" width="400">
+</p>
+
+To control the LCD we will use the I2C_MASTER APP. Add the APP in the project and double click on it to open the configuration tab. In "General Setting" change the "Desired bus speed" to 40 KHz. Then open the manual pin allocator and link the SCL and SDA pin (for example SCL to pin 0.13 and SDA to pin 3.15), save, close and generate the code. Now connect with a wire the SCL pin to pin 6 of the display and the SDA pin to pin 5. Pin 4 must be wired to ground, while pin 3 to 5V. 
+
+Now if you power the XMC 4700, display should light on. Now we can control the display sending command with the I2C_MASTER_Transmit function:
+
+```c
+I2C_MASTER_Transmit  ( I2C_MASTER_t *  handle,  
+  bool  send_start,  
+  const uint32_t  address,  
+  uint8_t *  data,  
+  const uint32_t  size,  
+  bool  send_stop  
+ ) 
+ 
+```
+- **handle** I2C device handle of type I2C_MASTER_t*  
+- **send_start** The flag to indicate that the start condition need to be send.  
+- **address** I2C slave device address.  
+- **data** buffer containing the data to transmit.  
+- **size** The number of bytes to be send to slave.  
+- **send_stop** The flag to indicate that the stop condition need to be send. 
