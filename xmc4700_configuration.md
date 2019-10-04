@@ -37,8 +37,74 @@ With this project we will set up a serial communication between the microcontrol
 
 Create a new DAVE project and add a UART[4.1.12] APP. Double click on it to open the setting panel. Under "Advanced Settings" you can change change the protocol handling for receiving and transmit. The possible choices are (from the UART APP Help page):
 
--**Interrupt**: Data provided by the user is transmitted using interrupts. FIFO can be configured to optimize the CPU utilization. Data is loaded to the transmit buffer in interrupt service handler. A callback function can be registered in "Interrupt Settings" tab to be executed after the transmission is complete. 
+- **Interrupt**: Data provided by the user is transmitted using interrupts. FIFO can be configured to optimize the CPU utilization. Data is loaded to the transmit buffer in interrupt service handler. A callback function can be registered in "Interrupt Settings" tab to be executed after the transmission is complete. 
 
 - **DMA**: Data provided by the user is transmitted by configuring DMA memory to peripheral block transfer. FIFO cannot be used in DMA mode. A callback function can be registered in "Interrupt Settings" tab to be executed after the transmission is complete. Note: DMA option uses DMA capable service requests for establishing DMA handshake. Only 2 such service requests are available for each USIC module. So the user may not be able to select this option if the DMA capable service requests of the USIC module are already used. 
 
--**Direct**: On selecting this option, interrupt signals will be available for external connection. User can choose a way for implementing data transfer. In this mode, the APP APIs implemented using 'Interrupt' or 'DMA' mode cannot be used.
+- **Direct**: On selecting this option, interrupt signals will be available for external connection. User can choose a way for implementing data transfer. In this mode, the APP APIs implemented using 'Interrupt' or 'DMA' mode cannot be used.
+
+Now we need to wire the APP to the pin. Open the Manual Pin Allocator and set pin 1.4 as "Receive Pin" and pin 1.5 as "Transmit Pin" and then Save and Close. Remember to generate the code everytime you modify the APP.
+
+After that in the prokect explorer on the left, double click on ``main.c`` to open the code. Delete everything and copy this code in:
+
+```C
+if(status == DAVE_STATUS_SUCCESS)
+  {
+    /*Transmit the string */
+    while(Send_Data[index] != 0)
+      {
+        UART_TransmitWord(&UART_0,Send_Data[index]);
+        index++;
+
+        /*Wait for transmit buffer interrupt to fill it again with remaining data */
+        while((UART_GetTXFIFOStatus(&UART_0) & XMC_USIC_CH_TXFIFO_EVENT_STANDARD) == 0);
+        UART_ClearTXFIFOStatus(&UART_0, XMC_USIC_CH_TXFIFO_EVENT_STANDARD);
+      }
+
+    /* Receive input */
+    index = 0;
+    while (1)
+      {
+        if (!UART_IsRXFIFOEmpty (&UART_0))
+          {
+            Rec_Data[index] = UART_GetReceivedWord(&UART_0);
+            index++;
+          }
+        if(Rec_Data[index-1]=='\n') break;
+      }
+
+    /* Format the string */
+    int int_value=0;
+    char char_value='\0';
+    sscanf(Rec_Data,"%s %d",&char_value, &int_value);
+
+
+    /*Transmit the received data */
+    index = 0;
+    while(1)
+      {
+        UART_TransmitWord(&UART_0,Rec_Data[index]);
+        index++;
+
+        /*Wait for transmit buffer interrupt to fill it again with remaining data */
+        while ((UART_GetTXFIFOStatus (&UART_0) & XMC_USIC_CH_TXFIFO_EVENT_STANDARD) == 0);
+        UART_ClearTXFIFOStatus(&UART_0, XMC_USIC_CH_TXFIFO_EVENT_STANDARD);
+
+        if(Rec_Data[index-1]=='\n') break;
+      }
+  }
+  else
+  {
+    XMC_DEBUG("main: Application initialization failed");
+    while(1U)
+    {
+    }
+  }
+  return 1U;
+}
+
+```
+
+This code sends through UART communication the string ``Send_Data`` and then receive data untill a ``\n`` comes through. At that point the program sends back the message received. The code can also formats the string sent if the string is in the format "<character> <spece> <integer>", saving the character in the variable ``char_value`` and the integer in ``int_value``.
+
+To test the program build the project and start the debugger. Then click "Resume" in the debug view toolbar. Use the Hterm terminal to see the receive and send the string to the microcontroller. 
