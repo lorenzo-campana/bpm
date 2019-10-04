@@ -34,3 +34,11 @@ With this project we will set up a serial communication between the microcontrol
 <p align="center">
   <img style="float: right;" src="https://i.imgur.com/vSITmo7.png" width="700">
 </p>
+
+Create a new DAVE project and add a UART[4.1.12] APP. Double click on it to open the setting panel. Under "Advanced Settings" you can change change the protocol handling for receiving and transmit. The possible choices are (from the UART APP Help page):
+
+-**Interrupt**: Data provided by the user is transmitted using interrupts. FIFO can be configured to optimize the CPU utilization. Data is loaded to the transmit buffer in interrupt service handler. A callback function can be registered in "Interrupt Settings" tab to be executed after the transmission is complete. 
+
+- **DMA**: Data provided by the user is transmitted by configuring DMA memory to peripheral block transfer. FIFO cannot be used in DMA mode. A callback function can be registered in "Interrupt Settings" tab to be executed after the transmission is complete. Note: DMA option uses DMA capable service requests for establishing DMA handshake. Only 2 such service requests are available for each USIC module. So the user may not be able to select this option if the DMA capable service requests of the USIC module are already used. 
+
+-**Direct**: On selecting this option, interrupt signals will be available for external connection. User can choose a way for implementing data transfer. In this mode, the APP APIs implemented using 'Interrupt' or 'DMA' mode cannot be used.
