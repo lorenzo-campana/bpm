@@ -137,7 +137,8 @@ To control the LCD we will use the I2C_MASTER APP. Add the APP in the project an
 Now if you power the XMC 4700, display should light on. Now we can control the display sending command with the I2C_MASTER_Transmit function:
 
 ```c
-I2C_MASTER_Transmit  ( I2C_MASTER_t *  handle,  
+I2C_MASTER_Transmit ( 
+  I2C_MASTER_t *  handle,  
   bool  send_start,  
   const uint32_t  address,  
   uint8_t *  data,  
@@ -152,3 +153,9 @@ I2C_MASTER_Transmit  ( I2C_MASTER_t *  handle,
 - **data** buffer containing the data to transmit.  
 - **size** The number of bytes to be send to slave.  
 - **send_stop** The flag to indicate that the stop condition need to be send. 
+
+For our display the default addres of the slave device is ``0x50``, and those are the available command with their corresponding address that must be sent:
+
+<p align="center">
+  <img style="float: right;" src="https://i.imgur.com/9t3eSJO.png" width="600">
+</p>
