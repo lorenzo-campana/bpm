@@ -154,8 +154,31 @@ I2C_MASTER_Transmit (
 - **size** The number of bytes to be send to slave.  
 - **send_stop** The flag to indicate that the stop condition need to be send. 
 
-For our display the default addres of the slave device is ``0x50``, and those are the available command with their corresponding address that must be sent:
+For our display the default addres of the slave device is ``0x50``. The following table contains the available commands with their corresponding address:
 
 <p align="center">
   <img style="float: right;" src="https://i.imgur.com/9t3eSJO.png" width="600">
 </p>
+
+SOme examples function that can be implemented in the code to control the display:
+
+```c
+void clear_display (void)
+{
+  uint8_t clear[2]={0xfe,0x51};
+  I2C_MASTER_Transmit(&I2C_MASTER_0, true, 0x50, clear, 2, false);
+}
+
+void send_text(uint8_t* text)
+{
+  I2C_MASTER_Transmit(&I2C_MASTER_0, true, 0x50, text, sizeof(text), false);
+}
+
+void set_position (uint8_t position)
+{
+  uint8_t set_position[3]={0xfe,0x45};
+  // position must be an addres between 0x00 and 0x67
+  set_position[2] = position;
+  I2C_MASTER_Transmit(&I2C_MASTER_0, true, 0x50, set_position, 3, false);
+}
+```
