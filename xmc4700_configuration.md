@@ -45,7 +45,7 @@ Create a new DAVE project and add a UART[4.1.12] APP. Double click on it to open
 
 Now we need to wire the APP to the pin. Open the Manual Pin Allocator and set pin 1.4 as "Receive Pin" and pin 1.5 as "Transmit Pin" and then Save and Close. Remember to generate the code everytime you modify the APP.
 
-After that in the prokect explorer on the left, double click on ``main.c`` to open the code. Delete everything and copy this code in:
+After that, in the project explorer on the left, double click on ``main.c`` to open the code. Delete everything and copy this code in:
 
 ```C
 #include <DAVE.h>                 //Declarations from DAVE Code Generation (includes SFR declaration)
@@ -120,9 +120,9 @@ int main(void)
 
 ```
 
-This code sends through UART communication the string ``Send_Data`` and then receive data untill a ``\n`` comes through. At that point the program sends back the message received. The code can also formats the string sent if the string is in the format "<character> <spece> <integer>", saving the character in the variable ``char_value`` and the integer in ``int_value``.
+This code sends through UART communication the string ``Send_Data`` and then receive data until a ``\n`` comes through. At that point the program sends back the message received. The code can also formats the string sent if the string is in the format "<character> <spece> <integer>", saving the character in the variable ``char_value`` and the integer in ``int_value``.
 
-To test the program build the project and start the debugger. Then click "Resume" in the debug view toolbar. Use the Hterm terminal to see the receive and send the string to the microcontroller. 
+To test the program build the project and start the debugger. Then click "Resume" in the debug view toolbar. Use the Hterm terminal to  send the string to the microcontroller and receive it back. 
 
 ### LCD Display
 
@@ -134,7 +134,7 @@ For this example we will use a Newhaven Dislay [NHD-0420D3Z-FL-GBW-V3](https://w
 
 To control the LCD we will use the I2C_MASTER APP. Add the APP in the project and double click on it to open the configuration tab. In "General Setting" change the "Desired bus speed" to 40 KHz. Then open the manual pin allocator and link the SCL and SDA pin (for example SCL to pin 0.13 and SDA to pin 3.15), save, close and generate the code. Now connect with a wire the SCL pin to pin 6 of the display and the SDA pin to pin 5. Pin 4 must be wired to ground, while pin 3 to 5V. 
 
-Now if you power the XMC 4700, display should light on. Now we can control the display sending command with the I2C_MASTER_Transmit function:
+Now if you power the XMC 4700, the display should light on. We can control the display sending command with the I2C_MASTER_Transmit function:
 
 ```c
 I2C_MASTER_Transmit ( 
@@ -160,7 +160,7 @@ For our display the default addres of the slave device is ``0x50``. The followin
   <img style="float: right;" src="https://i.imgur.com/9t3eSJO.png" width="600">
 </p>
 
-SOme examples function that can be implemented in the code to control the display:
+And finally these are some examples function that can be implemented in the code to control the display (remember to send the prefix addres before the actual command):
 
 ```c
 void clear_display (void)
@@ -182,3 +182,63 @@ void set_position (uint8_t position)
   I2C_MASTER_Transmit(&I2C_MASTER_0, true, 0x50, set_position, 3, false);
 }
 ```
+
+### USB Communication
+
+USB ia a more simple and robust way of communicating with the XMC than UART. To configure the communication we need to add to our project the "USBD_VCOM" APP; DAVE will automatically add the "USBD" APP, that can be edited to change the settings. For this example we don't need to change anything in the setting. Generate the code, and copy the following code in the ``main.c`` file.
+
+```c
+#include <DAVE.h>
+ int8_t RxBuffer[64] = { 0 };
+ int8_t TxBuffer[64] = { 0 };
+ uint8_t Bytes;
+
+
+
+ int main(void)
+ {
+   DAVE_STATUS_t status;
+
+   status = DAVE_Init();
+   if (status == DAVE_STATUS_FAILURE)
+   {
+     XMC_DEBUG(("DAVE Apps initialization failed with status %d\n", status));
+     while (1U)
+     {
+     }
+   }
+
+
+   if(USBD_VCOM_Connect() != USBD_VCOM_STATUS_SUCCESS)
+   {
+       return -1;
+   }
+
+   while(!USBD_VCOM_IsEnumDone());
+
+   while (1U)
+   {
+     Bytes = USBD_VCOM_BytesReceived();
+
+     if (Bytes)
+     {
+
+       USBD_VCOM_ReceiveByte(&RxBuffer[0]);
+
+       USBD_VCOM_SendByte(RxBuffer[0]);
+
+     }
+     CDC_Device_USBTask(&USBD_VCOM_cdc_interface);
+   }
+
+   return 1;
+ }
+
+```
+
+The code is really simple: the USB communicaion is initialized in the ``DAVE_Init()`` function. After the enumeration for the USB device is done ( ``while(!USBD_VCOM_IsEnumDone())`` ), the code will wait for at least one bite of information to come through the serial bus (``if(bytes)``) and then it will send it back.
+
+Upload the code to the board using the debugger. Unfortunately we can't test the program with the debugger: the USB interface is only wired to the main micro usb port, and not to the debugger one. 
+
+Connect the XMC 4700 to the pc and refresh the Hterm port list with the "R" button on the top right. After selecting the right COM port, the communication should start. 
+
