@@ -9,7 +9,8 @@ int mode_select=1; // manual mode -> 1 Automatic mode -> 0
 int dwell_time=100*100; // time to wait before switching to another channel in automatic mode
 int cycles=1; // number of time to go through the selected channels while switching
 int channel_select=1; // channel selection for manual mode. Accept a number between 1 and 16
-long int channel_mask=65535; // channel selection for automatic mode. Accept a number between 1 and 65535. To select the channels you want, convert a 16 bit binary number to decimal. eg 65535 = 1111111111111111 all channel selected
+long int channel_mask=65535; // channel selection for automatic mode. Accept a number between 1 and 65535. To select the channels 
+                             // you want, convert a 16 bit binary number to decimal. eg 65535 = 1111111111111111 all channel selected
 char error[40]; // string used for communicating back from the micro-controller to the pi
 int global_delay=10*100; // time to wait after receiving the 10 Hz trigger before starting switching
 
