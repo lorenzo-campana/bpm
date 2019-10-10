@@ -27,7 +27,7 @@ long int dwell_time=100; // time to wait before switching to another channel in 
 long int cycles=10; // number of time to go through the selected channels while switching
 int channel_select=1; // channel selection for manual mode. Accept a number between 1 and 16
 long int channel_mask=65535; // channel selection for automatic mode. Accept a number between 1 and 65535. To select the channels 
-                             // you want, convert a 16 bit binary number to decimal. eg 65535 = 1111111111111111 all channel selected
+// you want, convert a 16 bit binary number to decimal. eg 65535 = 1111111111111111 all channel selected
 char error[40]; // string used for communicating from the uno to the pi
 int global_delay=10; // time to wait after receiving the 10 Hz trigger before starting switching
 
@@ -37,9 +37,11 @@ int j;
 
 int volatile trigger=0; // variable that activates automatic mode when it is selected and a 10 hz trigger comes
 
-// C union struct used to convert the decimal channel selection number in binary.
-union data {
-    struct{
+// C union struct used to convert the decimal channel selction number in binary.
+union data 
+{
+    struct
+    {
         unsigned int a:1;
         unsigned int b:1;
         unsigned int c:1;
@@ -53,7 +55,8 @@ union data converter1;
 union data converter2;
 
 
-void setup() {
+void setup() 
+{
     pinMode(D0, OUTPUT); // setup for te output pins
     pinMode(D1, OUTPUT);
     pinMode(D2, OUTPUT);
@@ -61,18 +64,22 @@ void setup() {
     pinMode(D4, OUTPUT);
 
     pinMode(INT_PIN, INPUT_PULLUP); // setup for the trigger input pin
-    
+
     attachInterrupt(digitalPinToInterrupt(INT_PIN), interrupt10hz, FALLING); // define the trigger pin, the trigger edge and the function
-                                                                             // to be executed when the trigger comes
+    // to be executed when the trigger comes
     Serial.begin(9600); // make sure the serial commands match this baud rate
 }
 
-void loop () {
-    while (Serial.available()>0){ // detect if something comes through the serial
+void loop () 
+{
+    while (Serial.available()>0)
+    { // detect if something comes through the serial
         char lastRecvd = Serial.read(); // save the command in a variable
-        
-        if (lastRecvd == '\n') { // the end of the command has arrived
-            switch (input[0]) {
+
+        if (lastRecvd == '\n') 
+        { // the end of the command has arrived
+            switch (input[0]) 
+            {
 
                 case 'D':// dwell time has come in
                     input = input.substring(1,input.length()); 
@@ -96,7 +103,8 @@ void loop () {
                     input = input.substring(1,input.length());
                     channel_select = input.toInt();
                     sprintf(error, "chennel_selected_%d\n", channel_select);
-                    if (mode_select==1) { 
+                    if (mode_select==1) 
+                    { 
 
                         converter1.value=channel_select; // convert channel_select to a binary variable
                         digitalWrite(D0, converter1.outputs.a); // set the pins according to the channel selected
@@ -136,25 +144,31 @@ void loop () {
                     Serial.print("\n");
                     input = "";
                     break;
+
                 default:
                     input= "";
                     break;
             }// end switch
         }// end if
 
-        else { // input is still coming in
+        else 
+        { // input is still coming in
             input += lastRecvd;
         }
     }
 
 
-    if(mode_select==0 & trigger==1){
+    if(mode_select==0 & trigger==1)
+    {
         delayMicroseconds(global_delay); // delay from the 10 hz
         trigger=0; // reset the trigger variable
-        for(j=0;j<cycles; j++){ // for loop for the cycles
+        for(j=0;j<cycles; j++)
+        { // for loop for the cycles
 
-            for(i=0;i<16;i++){ // for loop for the channel
-                if((channel_mask&(mask<<i))>0){ //read the channel_mask
+            for(i=0;i<16;i++)
+            { // for loop for the channel
+                if((channel_mask&(mask<<i))>0)
+                { //read the channel_mask
 
                     converter2.value=i+1;
 
@@ -171,11 +185,12 @@ void loop () {
             digitalWrite(D2,LOW);
             digitalWrite(D3,LOW);
             digitalWrite(D4,LOW);   
-           }
+        }
     }
 }
 
 
-void interrupt10hz() { // 
+void interrupt10hz() 
+{ //interrupt function
     trigger=1; 
 }
